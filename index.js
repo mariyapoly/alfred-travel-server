@@ -23,6 +23,7 @@ async function run() {
 
         const database = client.db("online_travel");
         const serviceCollection = database.collection("services");
+        const orderCollection = database.collection("orders")
 
         // get all services data
         app.get("/services", async (req, res) => {
@@ -37,6 +38,48 @@ async function run() {
             const result = await serviceCollection.findOne(query);
             res.send(result);
         })
+        // get all order services data
+        app.get("/orders", async (req, res) => {
+            const cursor = orderCollection.find({});
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+        // get order service  data
+        app.get("/orders/:email", async (req, res) => {
+            const query = { email: req.params.email }
+            const result = await orderCollection.find(query).toArray();
+            res.send(result);
+        })
+        // post api for add a service
+        app.post("/services", async (req, res) => {
+            const result = await serviceCollection.insertOne(req.body);
+            res.send(result);
+        })
+        // post api for booking service
+        app.post("/addOrder", async (req, res) => {
+            const result = await orderCollection.insertOne(req.body);
+            res.send(result);
+        })
+        // post api for booking service updated
+        app.put("/orders/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    status: 'Approved'
+                },
+            };
+            const result = await orderCollection.updateOne(query, updateDoc, options);
+            res.send(result)
+        })
+        // delete api for booking service
+        app.delete("/orders/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await orderCollection.deleteOne(query);
+            res.send(result)
+        })
 
     }
     finally {
@@ -48,12 +91,8 @@ run().catch(console.dir)
 
 
 
-
-
-
-
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.send('Alfred Travel Server Runnign');
 })
 
 app.listen(port, () => {
