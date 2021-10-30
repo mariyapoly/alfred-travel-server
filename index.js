@@ -105,9 +105,9 @@ run().catch(console.dir)
 
 
 app.get('/', (req, res) => {
-    res.send('Alfred Travel Server Runnign');
+    res.send('Alfred Travel Server Running');
 })
 
 app.listen(port, () => {
-    console.log('alfred travel server runnign port', port)
+    console.log('alfred travel server running port', port)
 })
