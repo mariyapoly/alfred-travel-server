@@ -23,7 +23,9 @@ async function run() {
 
         const database = client.db("online_travel");
         const serviceCollection = database.collection("services");
-        const orderCollection = database.collection("orders")
+        const orderCollection = database.collection("orders");
+        const galleryCollection = database.collection("gallery");
+        const teamCollection = database.collection("team");
 
         // get all services data
         app.get("/services", async (req, res) => {
@@ -48,6 +50,18 @@ async function run() {
         app.get("/orders/:email", async (req, res) => {
             const query = { email: req.params.email }
             const result = await orderCollection.find(query).toArray();
+            res.send(result);
+        })
+        // get all gallery data
+        app.get("/gallery", async (req, res) => {
+            const cursor = galleryCollection.find({});
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+        // get all team data
+        app.get("/team", async (req, res) => {
+            const cursor = teamCollection.find({});
+            const result = await cursor.toArray();
             res.send(result);
         })
         // post api for add a service
