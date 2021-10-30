@@ -74,7 +74,7 @@ async function run() {
             const result = await orderCollection.insertOne(req.body);
             res.send(result);
         })
-        // post api for booking service updated
+        // put api for booking service status updated
         app.put("/orders/:id", async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
